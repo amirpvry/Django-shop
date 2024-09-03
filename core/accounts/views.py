@@ -5,7 +5,7 @@ from django.shortcuts import render
 class LoginView(auth_views.LoginView):
    
     template_name = "accounts/login.html"
-    redirect_authenticated_user = False
+    redirect_authenticated_user = True
     form_class = CustomAuthenticationForm
 
 
@@ -14,3 +14,7 @@ def custom_404_view(request, exception=None):
         'error_title': 'Page Not Found',
         'error_message': 'The page you are looking for does not exist.',
     }, status=404)
+    
+class LogoutView(auth_views.LogoutView):
+   
+    pass

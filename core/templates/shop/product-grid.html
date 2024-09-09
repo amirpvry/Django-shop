@@ -21,6 +21,9 @@
             <li class="breadcrumb-item ps-2">
               <a href="/index.html">خرید کنید</a>
             </li>
+            <a href="{% url 'cart:cart' %}">
+              Cart ({{ cart_total_items }} items)
+          </a>
             <li class="breadcrumb-item">
               <a href="/products-grid.html">محصولات</a>
             </li>
@@ -67,324 +70,83 @@
         <div id="navbarVerticalNavMenu" class="collapse navbar-collapse">
           <div class="w-100">
             <!-- Form -->
-            <form>
+            <form method="GET" action=".">
+
               <div class="border-bottom pb-4 mb-4">
-                <h5>جنسیت</h5>
-
-                <div class="d-grid gap-2">
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="menCheckbox" checked>
-                    <label class="form-check-label d-flex" for="menCheckbox">مرد <span
-                        class="ms-auto">(73)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="womenCheckbox" checked>
-                    <label class="form-check-label d-flex" for="womenCheckbox">زن <span
-                        class="ms-auto">(51)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-                </div>
+                <h5>فیلتر بر اساس قیمت</h5>
+            
+                <label for="priceRange">بازه قیمت: <span id="priceRangeValue">0 تومان - 500000 تومان</span></label>
+                <input type="range" class="form-range" min="0" max="500000" step="10000" id="minPriceRange" name="min_price" value="0" oninput="updatePriceRange()">
+                <input type="range" class="form-range mt-2" min="0" max="500000" step="10000" id="maxPriceRange" name="max_price" value="500000" oninput="updatePriceRange()">
+                
               </div>
+            
+          
+
+
 
               <div class="border-bottom pb-4 mb-4">
-                <h5>نام تجاری</h5>
-
+                <h5>سایز</h5>
+              
                 <div class="d-grid gap-2">
-                  <!-- Checkboxes -->
+                  <!-- Dynamic Checkboxes for Sizes -->
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="adidasCheckbox">
-                    <label class="form-check-label d-flex" for="adidasCheckbox">آدیداس <span
-                        class="ms-auto">(16)</span></label>
+                    <input class="form-check-input" type="checkbox" name="size" value="S" id="sizeSCheckbox">
+                    <label class="form-check-label d-flex" for="sizeSCheckbox">S</label>
                   </div>
-                  <!-- End Checkboxes -->
+            
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="size" value="M" id="sizeMCheckbox">
+                    <label class="form-check-label d-flex" for="sizeMCheckbox">M</label>
+                  </div>
+            
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="size" value="L" id="sizeLCheckbox">
+                    <label class="form-check-label d-flex" for="sizeLCheckbox">L</label>
+                  </div>
 
-                  <!-- Checkboxes -->
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="newBalanceCheckbox">
-                    <label class="form-check-label d-flex" for="newBalanceCheckbox">تعادل جدید<span
-                        class="ms-auto">(8)</span></label>
+                    <input class="form-check-input" type="checkbox" name="size" value="XL" id="sizeLCheckbox">
+                    <label class="form-check-label d-flex" for="sizeLCheckbox">XL</label>
                   </div>
-                  <!-- End Checkboxes -->
 
-                  <!-- Checkboxes -->
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="nikeCheckbox">
-                    <label class="form-check-label d-flex" for="nikeCheckbox">نایک <span
-                        class="ms-auto">(35)</span></label>
+                    <input class="form-check-input" type="checkbox" name="size" value="XXL" id="sizeLCheckbox">
+                    <label class="form-check-label d-flex" for="sizeLCheckbox">XXL</label>
                   </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="fredPerryCheckbox">
-                    <label class="form-check-label d-flex" for="fredPerryCheckbox">فرد پری<span
-                        class="ms-auto">(5)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="tnfCheckbox">
-                    <label class="form-check-label d-flex" for="tnfCheckbox">جبهه شمالی <span
-                        class="ms-auto">(1)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
+                  <!-- End Dynamic Checkboxes for Sizes -->
                 </div>
-
-                <!-- View More - Collapse -->
-                <div class="collapse" id="collapseBrand">
+            
+                <!-- دکمه ارسال فرم -->
+              </div>
+                <div class="border-bottom pb-4 mb-4">
+                  <h5>دسته بندی</h5>
+              
                   <div class="d-grid gap-2">
-                    <!-- Checkboxes -->
+                    <!-- Dynamic Checkboxes for Categories -->
+                    {% for cat in category %}
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="gucciCheckbox">
-                      <label class="form-check-label d-flex" for="gucciCheckbox">گوچی <span
-                          class="ms-auto">(5)</span></label>
+                      <input class="form-check-input" type="checkbox" name="categories" value="{{ cat.id }}" id="categoryCheckbox{{ cat.id }}">
+                      <label class="form-check-label d-flex" for="categoryCheckbox{{ cat.id }}">
+                        {{ cat.title }} 
+                        <span class="ms-auto">({{ cat.count }})</span>
+                      </label>
                     </div>
-                    <!-- End Checkboxes -->
-
-                    <!-- Checkboxes -->
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="mangoCheckbox">
-                      <label class="form-check-label d-flex" for="mangoCheckbox">انبه <span
-                          class="ms-auto">(1)</span></label>
-                    </div>
-                    <!-- End Checkboxes -->
+                    {% endfor %}
+                    <!-- End Dynamic Checkboxes for Categories -->
                   </div>
+              
+                  <!-- دکمه ارسال فرم -->
+                  <button type="submit" class="btn btn-primary mt-3">فیلتر</button>
                 </div>
-                <!-- End View More - Collapse -->
+          
+              
 
-                <!-- Link -->
-                <a class="link-sm link-collapse" href="#collapseBrand" role="button" data-bs-toggle="collapse"
-                  aria-expanded="false" aria-controls="collapseBrand">
-                  <span class="link-collapse-default">View more</span>
-                  <span class="link-collapse-active">View less</span>
-                </a>
-                <!-- End Link -->
-              </div>
 
-              <div class="border-bottom pb-4 mb-4">
-                <h5>اندازه</h5>
-
-                <div class="d-grid gap-2">
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="sizeSCheckbox" checked>
-                    <label class="form-check-label d-flex" for="sizeSCheckbox">S <span
-                        class="ms-auto">(27)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="sizeMCheckbox">
-                    <label class="form-check-label d-flex" for="sizeMCheckbox">M <span
-                        class="ms-auto">(18)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="sizeLCheckbox" checked>
-                    <label class="form-check-label d-flex" for="sizeLCheckbox">L <span
-                        class="ms-auto">(0)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="sizeXLCheckbox">
-                    <label class="form-check-label d-flex" for="sizeXLCheckbox">XL <span
-                        class="ms-auto">(1)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="sizeXXLCheckbox">
-                    <label class="form-check-label d-flex" for="sizeXXLCheckbox">XXL <span
-                        class="ms-auto">(2)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
+                <div class="d-grid">
+                  <a href="{% url 'shop:product-grid' %}" class="btn btn-white btn-transition">همه را پاک کن</a>
                 </div>
-              </div>
-
-              <div class="border-bottom pb-4 mb-4">
-                <h5>دسته بندی</h5>
-
-                <div class="d-grid gap-2">
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="tshirtCheckbox" checked>
-                    <label class="form-check-label d-flex" for="tshirtCheckbox">تی شرت<span
-                        class="ms-auto">(73)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="shoesCheckbox">
-                    <label class="form-check-label d-flex" for="shoesCheckbox">کفش <span
-                        class="ms-auto">(0)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="accessoriesCheckbox" checked>
-                    <label class="form-check-label d-flex" for="accessoriesCheckbox">تجهیزات جانبی <span
-                        class="ms-auto">(51)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="topsCheckbox" checked>
-                    <label class="form-check-label d-flex" for="topsCheckbox">تاپ ها <span
-                        class="ms-auto">(5)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="bottomCheckbox">
-                    <label class="form-check-label d-flex" for="bottomCheckbox">پایین <span
-                        class="ms-auto">(11)</span></label>
-                  </div>
-                  <!-- End Checkboxes -->
-                </div>
-
-                <!-- View More - Collapse -->
-                <div class="collapse" id="collapseCategory">
-                  <div class="d-grid gap-2">
-                    <!-- Checkboxes -->
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="shortsCheckbox">
-                      <label class="form-check-label d-flex" for="shortsCheckbox">شلوار کوتاه <span
-                          class="ms-auto">(6)</span></label>
-                    </div>
-                    <!-- End Checkboxes -->
-
-                    <!-- Checkboxes -->
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="hatsCheckbox">
-                      <label class="form-check-label d-flex" for="hatsCheckbox">کلاه <span
-                          class="ms-auto">(3)</span></label>
-                    </div>
-                    <!-- End Checkboxes -->
-
-                    <!-- Checkboxes -->
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="socksCheckbox">
-                      <label class="form-check-label d-flex" for="socksCheckbox">جوراب <span
-                          class="ms-auto">(8)</span></label>
-                    </div>
-                    <!-- End Checkboxes -->
-                  </div>
-                </div>
-                <!-- End View More - Collapse -->
-
-                <!-- Link -->
-                <a class="link-sm link-collapse" href="#collapseCategory" role="button" data-bs-toggle="collapse"
-                  aria-expanded="false" aria-controls="collapseCategory">
-                  <span class="link-collapse-default">بیشتر ببینید</span>
-                  <span class="link-collapse-active">کمتر مشاهده کنید</span>
-                </a>
-                <!-- End Link -->
-              </div>
-
-              <div class="border-bottom pb-4 mb-4">
-                <h5>رتبه بندی</h5>
-
-                <div class="d-grid gap-2">
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="1starCheckbox">
-                    <label class="form-check-label" for="1starCheckbox">
-                      <span class="d-flex gap-1">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                        (3)
-                      </span>
-                    </label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="2starCheckbox">
-                    <label class="form-check-label" for="2starCheckbox">
-                      <span class="d-flex gap-1">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                        (10)
-                      </span>
-                    </label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="3starCheckbox">
-                    <label class="form-check-label" for="3starCheckbox">
-                      <span class="d-flex gap-1">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                        (3)
-                      </span>
-                    </label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="4starCheckbox">
-                    <label class="form-check-label" for="4starCheckbox">
-                      <span class="d-flex gap-1">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star-muted.svg' %}" alt="Review rating" width="16">
-                        (34)
-                      </span>
-                    </label>
-                  </div>
-                  <!-- End Checkboxes -->
-
-                  <!-- Checkboxes -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="5starCheckbox">
-                    <label class="form-check-label" for="5starCheckbox">
-                      <span class="d-flex gap-1">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        <img src="{% static '/svg/illustrations/star.svg' %}" alt="Review rating" width="16">
-                        (120)
-                      </span>
-                    </label>
-                  </div>
-                  <!-- End Checkboxes -->
-                </div>
-              </div>
-
-              <div class="d-grid">
-                <button type="button" class="btn btn-white btn-transition">همه را پاک کن</button>
-              </div>
+                
             </form>
             <!-- End Form -->
           </div>
@@ -403,24 +165,24 @@
 
         <div class="col-sm-auto">
           <div class="d-sm-flex justify-content-sm-end align-items-center">
-            <!-- Select -->
+            <!-- Select for Relevance -->
             <div class="mb-2 mb-sm-0 me-sm-2">
-              <select class="form-select form-select-sm">
-                <option value="Relevance" selected>ارتباط</option>
-                <option value="mostRecent">اخیرا</option>
+              <select class="form-select form-select-sm" id="relevanceFilter" onchange="applyFilter()">
+                <option value="mostRecent" >اخیرا</option>
+                <option value="lessRecent">قدیمی</option>
               </select>
             </div>
             <!-- End Select -->
-
-            <!-- Select -->
+        
+            <!-- Select for Alphabetical Order -->
             <div class="mb-2 mb-sm-0 me-sm-2">
-              <select class="form-select form-select-sm">
-                <option value="alphabeticalOrderSelect1" selected>A-to-Z</option>
-                <option value="alphabeticalOrderSelect2">Z-to-A</option>
+              <select class="form-select form-select-sm" id="alphabeticalOrderFilter" onchange="applyFilter()">
+                <option value="A-to-Z" selected>A-to-Z</option>
+                <option value="Z-to-A">Z-to-A</option>
               </select>
             </div>
             <!-- End Select -->
-
+        
             <!-- Nav -->
             <ul class="nav nav-segment">
               <li class="nav-item">
@@ -439,6 +201,33 @@
         </div>
       </div>
       <!-- End Row -->
+      <script>
+        function applyFilter() {
+          var relevance = document.getElementById("relevanceFilter").value;
+          var alphabeticalOrder = document.getElementById("alphabeticalOrderFilter").value;
+      
+          // Get current URL parameters
+          var urlParams = new URLSearchParams(window.location.search);
+      
+          // Add new filter parameters
+          urlParams.set('relevance', relevance);
+          urlParams.set('alphabeticalOrder', alphabeticalOrder);
+      
+          // Redirect with the updated URL
+          window.location.search = urlParams.toString();
+        }
+        function resetFilters() {
+          // دریافت فرم
+          const form = document.querySelector('form');
+          
+          // ریست کردن همه ورودی‌ها
+          form.reset();
+          
+          // ارسال فرم پس از ریست کردن
+          form.submit();
+        }
+      </script>
+
 
       <div class="row row-cols-sm-2 row-cols-md-3 mb-10">
 
@@ -470,11 +259,11 @@
 
 
               <h4 class="card-title">
-                <a class="text-dark" href="/product-overview.html"> {{ obj.title }}</a>
+                <a class="text-dark" href="{% url 'shop:product-overview' slug=obj.slug %}"> {{ obj.title }}</a>
               </h4>
               {% if obj.discount_percent > 0 %}
-              <p class="text-muted"><del>{{ obj.price|intcomma }} تومان</del></p>
-              <p class="text-danger">{{ obj.discounted_price }} تومان</p>
+              <p class="text-muted"><del>{{ obj.price|intcomma }} تومان </del></p>
+              <p class="text-danger">{{ obj.discounted_price|intcomma }} تومان</p>
               {% else %}
               <p>{{ obj.price|intcomma }} تومان</p>
               {% endif %}
@@ -495,12 +284,23 @@
               </a>
               <!-- End Rating -->
 
-              <button type="button" class="btn btn-outline-primary btn-sm btn-transition rounded-pill">افزودن به سبد
+              <button type="button" class="btn btn-outline-primary btn-sm btn-transition rounded-pill" >افزودن به سبد
                 خرید</button>
             </div>
           </div>
           <!-- End Card -->
         </div>
+        
+        {% empty %}
+        <div class="row text-center w-100 py-5 mt-4">
+          <div class="col">
+            <div class="alert alert-info" role="alert">
+              <p>محصولی در حال حاضر در دسترس نیست</p>
+            </div>
+          </div>
+        </div>
+        
+    
         {% endfor %}
         <!-- End Col -->
 
@@ -545,6 +345,8 @@
                 <a class="page-link" href="#">...</a>
             </li>
             {% endif %}
+
+
             {% endfor %}
     
             {% if page_obj.has_next %}

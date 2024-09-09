@@ -20,6 +20,7 @@ class ProductCategoryModel(models.Model):
         
     def __str__(self):
         return self.title
+    
 
 
 # Create your models here.
@@ -36,26 +37,43 @@ class ProductModel(models.Model):
     status = models.IntegerField(choices=ProductStatusType.choices,default=ProductStatusType.draft.value)
     price = models.DecimalField(default=0,max_digits=10,decimal_places=0)
     discount_percent = models.IntegerField(default=0,validators = [MinValueValidator(0),MaxValueValidator(100)])
-    
+    discounted_price = models.DecimalField(max_digits=10, decimal_places=0, default=0)  # فیلد جدید
+
     avg_rate = models.FloatField(default=0.0)
     
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    
+    SIZE_CHOICES = [
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+        ('XL', 'XLarge'),
+        ('XXL', 'XXLarge'),
+        
+
+    ]
+    size = models.CharField(max_length=3, choices=SIZE_CHOICES, default='M')
+
     class Meta:
         ordering = ["-created_date"]
         
     def __str__(self):
         return self.title
     
-    @property
-    def discounted_price(self):
+    def calculate_discounted_price(self):
+        """محاسبه قیمت نهایی پس از تخفیف به صورت عددی"""
         if self.discount_percent > 0:
             discount_amount = self.price * (Decimal(self.discount_percent) / 100)
             discount_amount = round(discount_amount)
-            return '{:,}'.format(self.price - discount_amount)
-        price = round(Decimal(self.price))
-        return '{:,}'.format(price)
+            return self.price - discount_amount
+        return self.price
+
+
+    def save(self, *args, **kwargs):
+        """Override the save method to calculate discounted_price before saving."""
+        self.discounted_price = self.calculate_discounted_price()
+        super().save(*args, **kwargs)  # Call the "real" save() method.
+        
 
 
 

@@ -21,11 +21,10 @@
             <li class="breadcrumb-item ps-2">
               <a href="/index.html">خرید کنید</a>
             </li>
-            <a href="{% url 'cart:cart' %}">
-              Cart ({{ cart_total_items }} items)
+
           </a>
             <li class="breadcrumb-item">
-              <a href="/products-grid.html">محصولات</a>
+              <a href="{% url 'shop:product-grid' %}">محصولات</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">توری</li>
           </ol>
@@ -186,7 +185,7 @@
             <!-- Nav -->
             <ul class="nav nav-segment">
               <li class="nav-item">
-                <a class="nav-link active" href="/products-grid.html">
+                <a class="nav-link active" href="{% url 'shop:product-grid' %}">
                   <i class="bi-grid-fill"></i>
                 </a>
               </li>
@@ -284,7 +283,7 @@
               </a>
               <!-- End Rating -->
 
-              <button type="button" class="btn btn-outline-primary btn-sm btn-transition rounded-pill" >افزودن به سبد
+              <button type="button" class="btn btn-outline-primary btn-sm btn-transition rounded-pill" onclick="addCart('{{obj.id}}')" >افزودن به سبد
                 خرید</button>
             </div>
           </div>

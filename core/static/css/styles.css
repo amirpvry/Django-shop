@@ -1,0 +1,33 @@
+.btn-small {
+    font-size: 0.75rem; /* کوچک‌تر کردن اندازه فونت */
+    padding: 0.3rem 0.8rem; /* کاهش فاصله داخلی */
+}
+
+
+.btn-danger {
+  background-color: #b30c0c  !important; /* رنگ قرمز نرم‌تر */
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #ff5252; /* رنگ در حالت هاور */
+  transform: translateY(-2px); /* افکت هاور */
+}
+
+.btn-outline-primary {
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: #fff;
+  transform: translateY(-2px); /* افکت هاور */
+}
+
+.rounded-pill {
+  border-radius: 50px; /* دکمه‌های گردتر */
+}
+.icon-small {
+    font-size: 0.8rem; /* تنظیم اندازه فونت برای آیکون‌ها */
+}

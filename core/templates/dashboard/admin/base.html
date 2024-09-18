@@ -610,62 +610,6 @@
     }
   </script>
 
-  <script>
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-          const cookies = document.cookie.split(';');
-          for (let i = 0; i < cookies.length; i++) {
-              const cookie = cookies[i].trim();
-              // Does this cookie string begin with the name we want?
-              if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                  break;
-              }
-          }
-      }
-      return cookieValue;
-  }
-  
-  const csrftoken = getCookie('csrftoken');
-  
-  function addCart(product_id) {
-    console.log('Product ID:', product_id);  // نمایش product_id برای دیباگ
-    $.ajax({
-        url: "{% url 'cart_2:session-add-product' %}",
-        type: 'POST',
-        data: JSON.stringify({
-            product_id: product_id,
-        }),
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        headers: {
-            'X-CSRFToken': csrftoken,  // Add the CSRF token in the headers
-        },
-        success: function(response) {
-            $('#response').html('<p>Success: ' + JSON.stringify(response) + '</p>');
-        },
-        error: function(xhr, status, error) {
-            $('#response').html('<p>Error: ' + error + '</p>');
-        }
-    });
-  }
-  
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-  </script>
   {% block extra_js %} {% endblock extra_js %}
 
 

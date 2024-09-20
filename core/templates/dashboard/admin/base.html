@@ -608,6 +608,24 @@
       var maxPrice = document.getElementById('maxPriceRange').value;
       document.getElementById('priceRangeValue').innerText = minPrice + ' تومان - ' + maxPrice + ' تومان';
     }
+
+
+
+      function previewImage(input) {
+          const file = input.files[0];
+          if (file) {
+              const reader = new FileReader();
+  
+              reader.onload = function(e) {
+                  // Update the image source to the newly uploaded file
+                  document.getElementById('avatarImg').src = e.target.result;
+              };
+  
+              // Read the image file as a data URL
+              reader.readAsDataURL(file);
+          }
+      }
+
   </script>
 
   {% block extra_js %} {% endblock extra_js %}

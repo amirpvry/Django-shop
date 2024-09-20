@@ -76,37 +76,40 @@
                             <!-- Form -->
                             <div class="row mb-4">
                                 <label class="col-sm-3 col-form-label form-label">عکس پروفایل</label>
-
+                            
                                 <div class="col-sm-9">
                                     <!-- Media -->
                                     <div class="d-flex align-items-center">
                                         <!-- Avatar -->
                                         <label class="avatar avatar-xl avatar-circle" for="avatarUploader">
-                                            <img id="avatarImg" class="avatar-img" src="{{request.user.user_profile.image.url}}"
-                                                alt="Image Description">
+                                            <img id="avatarImg" class="avatar-img" 
+                                            src="{% if request.user.user_profile.image and request.user.user_profile.image.url != 'profile/default.png' %}{{ request.user.user_profile.image.url }}{% else %}{% static 'profile/default.png' %}{% endif %}" 
+                                            alt="Profile Image">
                                         </label>
-
+                            
                                         <div class="d-grid d-sm-flex gap-2 me-4">
+                                            <!-- Upload Button -->
                                             <div class="form-attachment-btn btn btn-primary btn-sm">آپلود عکس
-                                                <input type="file" class="js-file-attach form-attachment-btn-label"
-                                                    id="avatarUploader" data-hs-file-attach-options='{
-                                      "textTarget": "#avatarImg",
-                                      "mode": "image",
-                                      "targetAttr": "src",
-                                      "resetTarget": ".js-file-attach-reset-img",
-                                      "resetImg": "./assets/img/160x160/img1.jpg",
-                                      "allowTypes": [".png", ".jpeg", ".jpg"]
-                                   }'>
+                                                <input type="file" name="image" class="js-file-attach form-attachment-btn-label" id="avatarUploader"
+                                                    data-hs-file-attach-options='{
+                                                            "textTarget": "#avatarImg",
+                                                            "mode": "image",
+                                                            "targetAttr": "src",
+                                                            "allowTypes": [".png", ".jpeg", ".jpg"] 
+                                                    }'onchange="previewImage(this);">
                                             </div>
                                             <!-- End Avatar -->
-
-                                            <button type="button"
-                                                class="js-file-attach-reset-img btn btn-white btn-sm">حذف کردن</button>
+                            
+                                            <!-- Reset Button (Delete Image) -->
+                                            <button type="submit" name="delete_image" value="true" class="btn btn-white btn-sm">حذف کردن</button>
                                         </div>
+                                        
                                     </div>
                                     <!-- End Media -->
                                 </div>
                             </div>
+                            
+                            
                             <!-- End Form -->
 
                             <!-- Form -->
@@ -129,7 +132,7 @@
                                 <div class="col-sm-9">
                                     <input type="email" class="form-control text-center" name="email" id="emailLabel"
                                         placeholder="clarice@example.com" aria-label="clarice@example.com"
-                                        value="{{request.user.email}}">
+                                        value="{{request.user.email}}" disabled>
                                 </div>
                             </div>
                             <!-- End Form -->

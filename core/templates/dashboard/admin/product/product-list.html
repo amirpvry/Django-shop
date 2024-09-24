@@ -1,0 +1,264 @@
+{% extends "dashboard/admin/base.html" %}
+{%load static%}
+{% load humanize %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+{% if messages %}
+<div class="alert alert-dismissible fade show" role="alert">
+    {% for message in messages %}
+    <div
+        class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"
+            aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="navbar-dark bg-dark" style="
+          background-image: url({% static '/svg/components/wave-pattern-light.svg' %});
+        ">
+  <div class="container content-space-1 content-space-b-lg-3">
+    <div class="row align-items-center">
+      <div class="col">
+        <div class="d-none d-lg-block">
+          <h1 class="h2 text-white">داشبورد</h1>
+        </div>
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb breadcrumb-light mb-0">
+            <li class="breadcrumb-item">حساب</li>
+            <li class="breadcrumb-item active" aria-current="page">
+              داشبورد ادمین
+            </li>
+          </ol>
+        </nav>
+        <!-- End Breadcrumb -->
+      </div>
+      <!-- End Col -->
+
+      <div class="col-auto">
+        <!-- Responsive Toggle Button -->
+        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarNav"
+          aria-controls="sidebarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-default">
+            <i class="bi-list"></i>
+          </span>
+          <span class="navbar-toggler-toggled">
+            <i class="bi-x"></i>
+          </span>
+        </button>
+        <!-- End Responsive Toggle Button -->
+      </div>
+      <!-- End Col -->
+    </div>
+    <!-- End Row -->
+  </div>
+</div>
+<!-- End Breadcrumb -->
+
+<!-- Content Section -->
+<div class="container content-space-1 content-space-t-lg-0 content-space-b-lg-2 mt-lg-n10">
+  <div class="row">
+    <div class="col-lg-3">
+      <!-- Navbar -->
+      {% include 'dashboard/admin/sidbar.html' %}
+
+      <!-- End Navbar -->
+    </div>
+    <!-- End Col -->
+
+    <div class="col-lg-9">
+      <!-- Card -->
+      <div class="card">
+        <!-- Header -->
+        <div class="card-header border-bottom">
+          <h5 class="card-header-title">لیست سفارشات</h5>
+        </div>
+        <!-- End Header -->
+
+        <!-- Body -->
+        <div class="card-body">
+<div class="container pb-5">
+  <!-- فرم جستجو -->
+  <form method="GET" action="{% url 'dashboard:admin:product-list' %}" class="d-flex align-items-center mb-4">
+    <input type="text" name="q" class="form-control me-2" placeholder="جستجو محصولات"
+      aria-label="جستجو محصولات" value="{{ request.GET.q }}" style="border-radius: 20px; width: 200px;">
+    <button type="submit" class="btn btn-primary" style="border-radius: 20px;">جستجو</button>
+    <a href="{% url 'dashboard:admin:product-list' %}" class="btn btn-secondary ms-2" style="border-radius: 20px;">پاک کردن</a>
+    <a href="{% url 'dashboard:admin:product-create' %}" class="btn btn-secondary ms-2" style="border-radius: 20px;">ایجاد کردن</a>
+
+  </form>
+
+
+  <!-- فرم مرتب‌سازی و دسته‌بندی -->
+  <form class="d-flex gap-3 mb-4">
+    
+    <select class="form-select" id="priceOrder" name="priceOrder" style="border-radius: 20px; width: 150px;">
+      <option value="" selected>مرتب‌سازی بر اساس قیمت</option>
+      <option value="high-to-low">بیشترین به کمترین</option>
+      <option value="low-to-high">کمترین به بیشترین</option>
+    </select>
+
+    <!-- دسته‌بندی -->
+    <div class="dropdown">
+
+      <select class="form-select" id="categoryOrder" name="categories" multiple style="border-radius: 20px;">
+        <option value="" disabled>دسته‌بندی‌ها</option>
+        {% for cat in category %}
+        <option value="{{ cat.id }}">{{ cat.title }} ({{ cat.count }})</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+</div>
+
+<!-- Bootstrap JS for dropdown functionality -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+          
+          
+
+          <div class="row">
+            <!-- Table -->
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">شماره سفارش</th>
+                    <th scope="col">نام سفارش </th>
+                    <th scope="col">سفارش دهنده</th>
+                    <th scope="col">قیمت بدون تخفیف</th>
+                    <th scope="col">درصد تخفیف</th>
+                    <th scope="col">قیمت با تخفیف</th>
+                    <th scope="col">تاریخ ثبت</th>
+                    <th scope="col">تعداد موچودی</th>
+                    <th scope="col">ادیت</th>
+                    <th scope="col">وضعیت</th>
+                    <th scope="col">حذف</th>
+
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% for object in object_list %}
+                  <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>#12345</td>
+                    {% if object.is_published %}
+                    <td><a href="{% url 'shop:product-overview' slug=object.slug %}">{{ object.title }}</a></td>
+                    {% else %}
+                    <td>{{ object.title }}</td>
+                    {% endif %}
+                    <td>{{ object.user.user_profile.get_fullname }}</td>
+                    <td>{{ object.price|intcomma }}</td>
+                    <td>{{ object.discount_percent|intcomma }}</td>
+                    <td>{{ object.discounted_price|intcomma }}</td>
+                    <td>{{ object.created_date}}</td>
+                    <td>{{ object.stock}}</td>
+                    <td><a href="{% url 'dashboard:admin:product-edit' pk=object.pk %}">edit</a></td>
+
+                    <td> {% if object.is_published %} <span class="badge bg-success">فعال</span> {% else %} <span
+                        class="badge bg-danger">غیر فعال</span></td>{%endif %}
+
+                        
+                    <td>
+                      <form method="post" action="{% url 'dashboard:admin:product-delete' pk=object.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">حذف</button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- End Table -->
+          </div>
+
+          <!-- End Table -->
+
+
+          <!-- Pagination -->
+          <div class="row pt-5 mt-3">
+            <nav aria-label="Page navigation py-3">
+              <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1">قبلی</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">بعدی</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <!-- End Pagination -->
+
+
+
+        </div>
+        <!-- End Row -->
+
+      </div>
+      <!-- End Body -->
+    </div>
+    <!-- End Card -->
+  </div>
+  <!-- End Col -->
+</div>
+<!-- End Row -->
+</div>
+<!-- End Content Section -->
+
+<script>
+  document.getElementById('priceOrder').addEventListener('change', function () {
+    const selectedValue = this.value;
+    const url = new URL(window.location.href);
+
+    if (selectedValue) {
+      // پارامتر مرتب‌سازی بر اساس قیمت را به URL اضافه یا به‌روزرسانی می‌کنیم
+      url.searchParams.set('priceOrder', selectedValue);
+    } else {
+      // اگر گزینه انتخاب نشده بود، پارامتر priceOrder را حذف می‌کنیم
+      url.searchParams.delete('priceOrder');
+    }
+
+    // بازنشانی صفحه با URL جدید
+    window.location.href = url.toString();
+  });
+
+
+
+  document.getElementById('categoryOrder').addEventListener('change', function () {
+    const selectedOptions = Array.from(this.selectedOptions);
+    const selectedValues = selectedOptions.map(option => option.value);
+    const url = new URL(window.location.href);
+
+    // ابتدا تمام پارامترهای قبلی categories را حذف می‌کنیم
+    url.searchParams.delete('categories');
+
+    // سپس مقادیر جدید را اضافه می‌کنیم
+    selectedValues.forEach(value => {
+      url.searchParams.append('categories', value);
+    });
+
+    // بازنشانی صفحه با URL جدید
+    window.location.href = url.toString();
+  });
+
+  $(document).ready(function () {
+    $('#categoryOrder').select2({
+      placeholder: "دسته‌بندی‌ها را انتخاب کنید"
+    });
+  });
+</script>
+
+
+{% endblock content %}

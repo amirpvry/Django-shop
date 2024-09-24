@@ -167,6 +167,8 @@
             <!-- Select for Relevance -->
             <div class="mb-2 mb-sm-0 me-sm-2">
               <select class="form-select form-select-sm" id="relevanceFilter" onchange="applyFilter()">
+                <option value="" >بر اساس زمان</option>
+
                 <option value="mostRecent" >اخیرا</option>
                 <option value="lessRecent">قدیمی</option>
               </select>
@@ -176,7 +178,9 @@
             <!-- Select for Alphabetical Order -->
             <div class="mb-2 mb-sm-0 me-sm-2">
               <select class="form-select form-select-sm" id="alphabeticalOrderFilter" onchange="applyFilter()">
-                <option value="A-to-Z" selected>A-to-Z</option>
+                <option value="" >بر اساس حروف الفبا</option>
+
+                <option value="A-to-Z" >A-to-Z</option>
                 <option value="Z-to-A">Z-to-A</option>
               </select>
             </div>
@@ -446,6 +450,23 @@
   <!-- End Row -->
 </div>
 <!-- End Clients -->
+<script>
+  document.getElementById('priceOrder').addEventListener('change', function() {
+    const selectedValue = this.value;
+    const url = new URL(window.location.href);
+    
+    if (selectedValue) {
+      // پارامتر مرتب‌سازی بر اساس قیمت را به URL اضافه یا به‌روزرسانی می‌کنیم
+      url.searchParams.set('priceOrder', selectedValue);
+    } else {
+      // اگر گزینه انتخاب نشده بود، پارامتر priceOrder را حذف می‌کنیم
+      url.searchParams.delete('priceOrder');
+    }
+
+    // بازنشانی صفحه با URL جدید
+    window.location.href = url.toString();
+  });
+</script>
 
 
 

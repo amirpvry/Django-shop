@@ -29,15 +29,17 @@ class ProductModel(models.Model):
     category = models.ManyToManyField(ProductCategoryModel)
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True,unique=True)
-    image = models.ImageField(default="/default/product-image.png",upload_to="product/img/")
+    image = models.ImageField(default="product/img/default.png",upload_to="product/img/")
+
+
     description = models.TextField()
     brief_description = models.TextField(null=True,blank=True)
     
     stock = models.PositiveIntegerField(default=0)
     status = models.IntegerField(choices=ProductStatusType.choices,default=ProductStatusType.draft.value)
     price = models.DecimalField(default=0,max_digits=10,decimal_places=0)
-    discount_percent = models.IntegerField(default=0,validators = [MinValueValidator(0),MaxValueValidator(100)])
-    discounted_price = models.DecimalField(max_digits=10, decimal_places=0, default=0)  # فیلد جدید
+    discount_percent = models.IntegerField(default=0,validators = [MinValueValidator(0),MaxValueValidator(100)]) #خود درصد تخفیف
+    discounted_price = models.DecimalField(max_digits=10, decimal_places=0, default=0)  # قیمت با تخفیف
 
     avg_rate = models.FloatField(default=0.0)
     

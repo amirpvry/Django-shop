@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'shop',
     'accounts',
     'cart_2',
-    'dashboard'
+    'dashboard',
+    'crispy_forms',
+    'crispy_bootstrap4'
 ]
 
 MIDDLEWARE = [
@@ -80,6 +82,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Database

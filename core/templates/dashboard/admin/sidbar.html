@@ -41,25 +41,38 @@
           </ul>
           <!-- End List -->
 
-          <span class="text-cap">خريد كردن</span>
-
-          <!-- List -->
           <ul class="nav nav-sm nav-tabs nav-vertical mb-4">
             <li class="nav-item">
-              <a class="nav-link " href="./account-orders.html">
-                <i class="bi-basket nav-icon"></i> سفارشات شما
+              <a class="nav-link " href="{% url 'dashboard:admin:product-list' %}">
+                <i class="bi-shop-window nav-icon"></i> محصولات
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link " href="./account-wishlist.html">
-                <i class="bi-heart nav-icon"></i>لیست علایق<span
-                  class="badge bg-soft-dark text-dark rounded-pill nav-link-badge">2</span>
+              <a class="nav-link " href="./admin-account-order.html">
+                <i class="bi-receipt-cutoff nav-icon"></i> سفارشات
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="./admin-account-support.html">
+                <i class="bi-envelope nav-icon"></i> تیکت ها
               </a>
             </li>
 
+
+          </ul>
+
+          <span class="text-cap">کاربران</span>
+
+           <!-- List -->
+           <ul class="nav nav-sm nav-tabs nav-vertical mb-4">
             <li class="nav-item">
-              <a class="nav-link " href="./account-address.html">
-                <i class="bi-geo-alt nav-icon"></i> نشانی
+              <a class="nav-link " href="./admin-account-users.html">
+                <i class="bi-person nav-icon"></i> لیست کاربران
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="./admin-account-newsletter.html">
+                <i class="bi-newspaper nav-icon"></i> خبرنامه
               </a>
             </li>
 

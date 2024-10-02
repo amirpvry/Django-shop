@@ -644,6 +644,7 @@
         },
         success: function(response) {
             $('#response').html('<p>Success: ' + JSON.stringify(response) + '</p>');
+            location.reload();
         },
         error: function(xhr, status, error) {
             $('#response').html('<p>Error: ' + error + '</p>');

@@ -1,0 +1,141 @@
+{% extends 'dashboard/customer/base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-light mb-0">
+        <li class="breadcrumb-item">حساب</li>
+        <li class="breadcrumb-item"> داشبورد</li>
+        <li class="breadcrumb-item active" aria-current="page">
+            ویرایش ادرس
+        </li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<!-- Card -->
+<div class="card mb-3">
+    <div class="card-header border-bottom">
+        <h4 class="card-header-title">ویرایش ادرس</h4>
+    </div>
+    <!-- Body -->
+    <div class="card-body">
+
+        <!-- End Form -->
+    </div>
+</div>
+<div class="card mb-3">
+    <div class="card-header border-bottom">
+        <h4 class="card-header-title">اطلاعات پایه</h4>
+    </div>
+
+    <form action="." method="post">
+        <!-- Body -->
+        <div class="card-body">
+            <!-- Form -->
+
+            {% csrf_token %}
+
+
+            <!-- Form -->
+
+            <!-- End Form -->
+
+            <!-- Form -->
+   
+            <!-- End Form -->
+
+            <!-- Form -->
+            <div class="row mb-4">
+                <label for="phoneLabel" class="col-sm-3 col-form-label form-label">تلفن</label>
+
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        {{form.phone_number}}
+
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row mb-4">
+                <label for="phoneLabel" class="col-sm-3 col-form-label form-label">مکان</label>
+
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        {{form.state}}
+
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row mb-4">
+                <label for="phoneLabel" class="col-sm-3 col-form-label form-label">شهر</label>
+
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        {{form.city}}
+
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row mb-4">
+                <label for="phoneLabel" class="col-sm-3 col-form-label form-label">آدرس</label>
+
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        {{form.address}}
+
+
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <label for="phoneLabel" class="col-sm-3 col-form-label form-label">کد پستی</label>
+
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        {{form.zip_code}}
+
+
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- End Form -->
+        </div>
+        <!-- End Body -->
+
+        <!-- Footer -->
+        <div class="card-footer pt-0">
+            <div class="d-flex justify-content-end gap-3">
+                <a class="btn btn" href="{% url 'dashboard:customer:address-edit' pk=object.pk %}">لغو</a>
+
+                <button class="btn btn-primary" type="submit">ذخیره تغییرات</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="card mb-3"></div>
+    <div class="card-footer pt-0">
+        <form action="{% url 'dashboard:customer:address-delete'  pk=object.pk %}" method="post" onsubmit="return confirm('آیا از حذف این آدرس مطمئن هستید؟');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">حذف آدرس</button>
+        </form>
+    </div>
+</div>
+    <!-- End Footer -->
+</div>
+<!-- End Card -->
+{% endblock %}

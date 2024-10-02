@@ -1,0 +1,8 @@
+<div class="card mb-3"></div>
+    <div class="card-footer pt-0">
+        <form action="{% url 'dashboard:customer:address-delete'  pk=object.pk %}" method="post" onsubmit="return confirm('آیا از حذف این آدرس مطمئن هستید؟');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">حذف آدرس</button>
+        </form>
+    </div>
+</div>

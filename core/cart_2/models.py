@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class CartModel(models.Model):
-    user = models.ForeignKey("accounts.User",on_delete=models.CASCADE)
+    user = models.ForeignKey("accounts.User",on_delete=models.CASCADE , related_name="items")
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -11,6 +11,11 @@ class CartModel(models.Model):
     def calculate_total_price(self):
         # جمع کردن کل قیمت همه آیتم‌ها در سبد خرید
         return sum(item.get_total_price() for item in self.cart_items.all())
+    def get_total_price(self):
+        product_price = self.product.get_price()  # متد get_price برای محاسبه قیمت محصول
+        return product_price * self.quantity  # قیمت کل با توجه به تعداد محصول
+
+    
     
 class CartItemModel(models.Model):
     cart = models.ForeignKey(CartModel,on_delete=models.CASCADE,related_name="cart_items") 

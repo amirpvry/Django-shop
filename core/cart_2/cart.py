@@ -10,7 +10,11 @@ class CartSession:
         self._cart = self.session.setdefault("cart", {"items": []})
         if not isinstance(self._cart, dict):
             self._cart = {"items": []}
-
+    # متد برای پاک کردن سبد خرید
+    def clear(self):
+        """پاک کردن محتوای سبد خرید"""
+        self._cart = {"items": []}
+        self.save()
     def update_product_quantity(self, product_id, quantity):
         for item in self._cart["items"]:
             if product_id == item["product_id"]:

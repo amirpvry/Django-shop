@@ -16,6 +16,10 @@ class UserAddressModel(models.Model):
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+    
+    
+    def __str__(self):
+        return f"{self.address}, {self.city}, {self.state}, {self.zip_code}"
 
 class CouponModel(models.Model):
     code = models.CharField(max_length=100)

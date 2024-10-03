@@ -10,8 +10,8 @@
       <h4 class="mb-3">انتخاب آدرس </h4>
 
       <!-- Form -->
-      <form action="." class="needs-validation" novalidate>
-
+      <form action="." method="post" id="checkout-form">
+        {% csrf_token %}
         <hr class="my-4">
 
         <div class="d-grid gap-2">
@@ -19,17 +19,20 @@
           <!-- Check -->
           {% for address in addresses %}
           <div class="form-check">
-            <span class="h5 d-block">آدرس {{ address.id }}</span>
-            <input type="radio" class="form-check-input" name="address" id="address-{{ address.id }}"
-              value="{{ address.id }}" {% if forloop.first %}checked{% endif %} required>
-            <label class="form-check-label" for="address-{{ address.id }}">{{ address.state }} , {{ address.city }} , {{
-              address.address }} , کدپستی {{ address.zip_code }}</label>
-            <a class="btn btn-white btn-xs" href="{% url 'dashboard:customer:address-edit' pk=address.pk %}">
-              <i class="bi-pencil-fill me-1"></i> آدرس را ویرایش کنید
-            </a>
+            <input type="radio" class="form-check-input" name="address_id" value="{{address.id}}" required>
+            <label class="form-check-label" for="address">
+              {{address.state}},{{address.city}},{{address.address}} ,{{address.zip_code}}</label>
           </div>
           {% endfor %}
 
+          <!-- Coupon Section -->
+          <div class="input-group border-bottom pb-4 mb-3">
+            {{ form.coupon_code.errors }}  <!-- نمایش ارورهای کوپن -->
+            <input type="text" class="form-control text-center" name="coupon_code" placeholder="کد تخفیف" aria-label="کد تخفیف">
+            <button class="btn btn-primary" type="submit">اعمال کوپن</button>
+        </div>
+    
+          <!-- End Coupon Section -->
           <!-- End Check -->
           <div>
             <a class="" href="{% url 'dashboard:customer:address-list' %}">مدیریت آدرس‌ها</a>
@@ -61,49 +64,44 @@
               <h3 class="card-header-title">خلاصه سفارش</h3>
             </div>
 
-            <!-- Form برای بررسی کد تخفیف -->
-            <form action="."  method="GET">
-              <div class="input-group border-bottom pb-4 mb-3">
-                <input type="text" class="form-control text-center" name="coupon_code" placeholder="کد تخفیف"
-                  aria-label="کد تخفیف">
-                <button class="btn btn-primary" type="submit">بررسی</button>
-              </div>
 
-              {% if coupon %}
-              <div class="alert alert-success">
-                کد تخفیف اعمال شد: {{ coupon.discount_percent }}٪ تخفیف
-              </div>
-              {% elif coupon_error %}
-              <div class="alert alert-danger">
-                {{ coupon_error }}
-              </div>
-              {% endif %}
 
-              <div class="border-bottom pb-4 mb-4">
-                <div class="d-grid gap-3">
-                  <dl class="row">
-                    <dt class="col-sm-6">هزینه ارسال</dt>
-                    <dd class="col-sm-12 text-sm-end mb-0">{{ shipping_cost }} تومان</dd>
-                  </dl>
+            <div class="border-bottom pb-4 mb-4">
+              <div class="d-grid gap-3">
 
-                  <dl class="row">
-                    <dt class="col-sm-6">مالیات تخمینی</dt>
-                    <dd class="col-sm-12 text-sm-end mb-0">{{ total_tax }} تومان</dd>
-                  </dl>
-                </div>
-              </div>
+                <!-- End Row -->
 
-              <div class="d-grid gap-3 mb-4">
                 <dl class="row">
-                  <dt class="col-sm-6">جمع کل</dt>
-                  <dd class="col-sm-6 text-sm-end mb-0">{{ total_price }} تومان</dd>
+                  <dt class="col-sm-6">هزینه ارسال</dt>
+                  <dd class="col-sm-12 text-sm-end mb-0">برای تهران و حومه 35000 تومان</dd>
+                  <dd class="col-sm-12 text-sm-end mb-0">برای شهرستان ها 50000 تومان</dd>
                 </dl>
+                <!-- End Row -->
               </div>
+            </div>
 
-              <div class="d-grid">
-                <a class="btn btn-primary btn-lg" href="/order-completed.html">ثبت نهایی</a>
-              </div>
-            </form>
+            <div class="d-grid gap-3 mb-4">
+              <dl class="row">
+                <dt class="col-sm-6">مالیات تخمینی</dt>
+                <dd class="col-sm-12 text-sm-end mb-0">
+                  9% مالیات -
+                  <span class="formatted-price" id="total-tax"> {{total_tax}}</span>
+                </dd>
+
+              </dl>
+              <!-- End Row -->
+
+              <dl class="row">
+                <dt class="col-sm-6">جمع کل</dt>
+                <dd class="col-sm-6 text-sm-end mb-0 formatted-price" id="total-price">{{total_price}}</dd>
+              </dl>
+              <!-- End Row -->
+            </div>
+
+            <div class="d-grid">
+              <button class="btn btn-primary btn-lg" type="submit" form="checkout-form">ثبت نهایی</button>
+            </div>
+
           </div>
           <!-- End Card -->
         </div>
@@ -120,6 +118,7 @@
                   d="M1.98508 18V13C1.98508 11.8954 2.88051 11 3.98508 11H11.9851C13.0896 11 13.9851 11.8954 13.9851 13V18C13.9851 19.1046 13.0896 20 11.9851 20H4.10081L2.85695 21.1905C2.53895 21.4949 2.01123 21.2695 2.01123 20.8293V18.3243C1.99402 18.2187 1.98508 18.1104 1.98508 18ZM5.99999 14.5C5.99999 14.2239 6.22385 14 6.49999 14H11.5C11.7761 14 12 14.2239 12 14.5C12 14.7761 11.7761 15 11.5 15H6.49999C6.22385 15 5.99999 14.7761 5.99999 14.5ZM9.49999 16C9.22385 16 8.99999 16.2239 8.99999 16.5C8.99999 16.7761 9.22385 17 9.49999 17H11.5C11.7761 17 12 16.7761 12 16.5C12 16.2239 11.7761 16 11.5 16H9.49999Z"
                   fill="#035A4B" />
               </svg>
+
             </div>
           </div>
           <div class="flex-grow-1 ms-2">
